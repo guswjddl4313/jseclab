@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<div class="container my-3">
+    <table class="table" style="width:50%; margin:auto; margin-top:50px;">
+        <thead>
+        <tr class="text-center table-dark">
+            <th>번호</th>
+            <th style="width:50%">프로그램</th>
+    		<th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if file %}
+        {% for post in file %}
+        <tr class="text-center">
+            <td>
+                {{ forloop.counter }}
+            </td>
+            <td>{{post.title}}</td>
+            <td>
+                <a href="{{post.adminupload.url}}" download="{{post.adminupload.url}}">다운로드</a>
+            </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="4">프로그램이 존재하지 않습니다. 관리자에게 문의하십시오.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load jhpy_filter %}
+{% block content %}
+
+<div class="contents">
+    <div class="border">
+        <img src="https://proxy.goorm.io/service/62dffc2d3611296cc504a1e0_dRjco00Lw8q7Tsw6djr.run.goorm.io/9080/file/load/maindesign.jpg?path=d29ya3NwYWNlJTJGamhzZXJ2ZXIlMkZzdGF0aWMlMkZtYWluZGVzaWduLmpwZw==&docker_id=dRjco00Lw8q7Tsw6djr&secure_session_id=bbR4M9ra1QQiPgSWUJAOgpxpLPJGta8n" style="position:absolute; width:100%; height:100%">
+        <h1 style="position:absolute; color:white; margin:160px 50px 30px 50px">
+            <span>JSecurityLab</span>
+            <br>&ZeroWidthSpace;프로그램 개발 연구소
+        </h1>
+        <h1 style="position:absolute; color:white; margin:270px 0px 0px 50px; font-size:20px;">&ZeroWidthSpace;잊지못할 프로그램을 만나보세요!<h1>
+    </div>
+    <div class="border" style="position:absolute; width:800px; margin:100px 0px 0px 1050px;">
+    <div class="title_height">
+        <h2 style="color:white; margin-left:5px; margin-top:5px">
+            공지사항
+        </h2>
+    </div>
+    <div>
+        <table class="table" style="width:95%; margin-left:20px; color:white">
+        <thead>
+        <tr class="text-center" style="background-color:purple;">
+            <th>번호</th>
+            <th style="width:30%">제목</th>
+    		<th>글쓴이</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if notice_list %}
+        {% for notice in notice_list %}
+        <tr class="text-center">
+            <td>
+                <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                {{ forloop.counter }}
+            </td>
+            <td class="text-start">
+                <a href="{% url 'jhpy:notice_detail' notice.id %}">{{ notice.subject }}</a>
+                {% if notice.answer_set.count > 0 %}
+    			<span class="text-danger small mx-2">{{ notice.answer_set.count }}</span>
+    			{% endif %}
+            </td>
+            <td>{{ notice.author.username }}</td>  <!-- 글쓴이 추가 -->
+            <td>{{ notice.create_date }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="4">공지가 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    </div>
+</div>
+</div>
+<form id="searchForm" method="get" action="{% url 'jhpy:notice' %}">
+    <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+    <input type="hidden" id="page" name="page" value="{{ page }}">
+</form>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value = this.dataset.page;
+        document.getElementById('searchForm').submit();
+    });
+});
+const btn_search = document.getElementById("btn_search");
+btn_search.addEventListener('click', function() {
+    document.getElementById('kw').value = document.getElementById('search_kw').value;
+    document.getElementById('page').value = 1;  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+    document.getElementById('searchForm').submit();
+});
+</script>
+{% endblock %}
